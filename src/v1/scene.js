@@ -55,14 +55,9 @@ var Scene = (function() {
 			this.model_VOBs[model_names[i]].cleanUp();
 		}
 	
-		// Remove all event handlers
-		this.canvas_ct.removeEventListner( "mousedown", this.events.mouse_drag_started);
-		this.canvas_ct.removeEventListner( "mouseup", this.events.mouse_drag_ended );
-		this.canvas_ct.removeEventListner( "mousemove", this.events.mouse_dragged );
-		this.events.removeAllEventHandlers();
+		
 	
-		// Disable any animation
-		this.animate_active = false;
+
   	}
 	
 	return Scene;
