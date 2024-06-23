@@ -75,9 +75,18 @@ function main() {
 
 	var events = new Events(scene, controls);
 	
-	this.canvas_ct.addEventListener('mousedown', events.mouse_drag_started);
-	this.canvas_ct.addEventListener('mouseup', events.mouse_drag_ended);
-	this.canvas_ct.addEventListtener('mousemove', events.mouse_dragged);
+	canvas.addEventListener('mousedown', events.mouse_drag_started);
+	canvas.addEventListener('mouseup', events.mouse_drag_ended);
+	canvas.addEventListtener('mousemove', events.mouse_dragged);
+
+
+	/*
+	// Remove all event handlers
+	canvas.removeEventListner( "mousedown", this.events.mouse_drag_started);
+	canvas.removeEventListner( "mouseup", this.events.mouse_drag_ended );
+	canvas.removeEventListner( "mousemove", this.events.mouse_dragged );
+	canvas.removeAllEventHandlers();
+	*/
 	
 	events.animate();
 }
