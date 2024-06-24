@@ -52,7 +52,7 @@ var Model_VOB = (function() {
 
 
 	
-		this.render = function(transform_matrix) {
+		this.render = function(uProjectionMatrix, uModelViewMatrix) {
 			// Wir haben hauptsächlich folgende Schritte hier auszuführen:
 			// 1.) uniform variables ==>  shader kopieren. (uniform sind Variablen die sich während dem Rendering nicht ändern).
 			// 2.) Vertex Buffer erstellen
@@ -66,7 +66,8 @@ var Model_VOB = (function() {
 			
 
 			// 1.) uniform variables ==>  shader kopieren.
-			this.gl.uniformMatrix4fv(this.program_data.uniformLocations['uProjectionMatrix'], false, transform_matrix);
+			this.gl.uniformMatrix4fv(this.program_data.uniformLocations['uProjectionMatrix'], false, uProjectionMatrix);
+			this.gl.uniformMatrix4fv(this.program_data.uniformLocations['uModelViewMatrix'], false, uModelViewMatrix);
 			
 			// 2.) 3.) und 4.) Vertex-Buffer erstellen, Bind Buffer und Buffer Data
 			this.createVertextPositionBuffer();

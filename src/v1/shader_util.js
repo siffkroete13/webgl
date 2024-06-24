@@ -23,9 +23,8 @@ var ShaderUtil = (function() {
 			gl.deleteShader(shader);
 			shader = null;
 		}
-	
+		
 		return shader;
-	  	
 	}
 	
 	ShaderUtil.prototype.createProgram = function(gl, vShaderCode, fShaderCode) {

@@ -36,42 +36,32 @@ function main() {
 	
 	var model_data = [];
 	
-	model_data[0] = {
-		type: 'simple',
-		primitives: 'POINTS',
-		
-		num_lines: 12,
-		num_vertices: 8,
-		num_dim: 3,
-		
-		positions: [
-			// Vorderseite
-			-10.0, -10.0,  10.0,
-			 10.0, -10.0,  10.0,
-			 10.0,  10.0,  10.0,
-			-10.0,  10.0,  10.0,
-		
-			// Rückseite
-			-10.0, -10.0, -10.0,
-			 10.0, -10.0, -10.0,
-			 10.0,  10.0, -10.0,
-			-10.0,  10.0, -10.0
-		],
-		
-		colors: [
-			0.0,  0.0,  0.0,  1.0,    
-			0.0,  0.0,  1.0,  1.0,    
-			0.0,  0.0,  0.0,  1.0,    
-			0.0,  0.0,  1.0,  1.0,
+	model_data = [
+		{
+			type: 'simple',
+			primitives: 'POINTS',
+			num_vertices: 5,
+			num_dim: 3,
 			
-			0.0,  0.0,  0.0,  1.0,    
-			0.0,  0.0,  1.0,  1.0,    
-			0.0,  0.0,  0.0,  1.0,    
-			0.0,  0.0,  1.0,  1.0,   
-		],
-		
-		
-	}
+			// Positionen für ein Kreuz: eine Linie in X-Richtung und eine Linie in Y-Richtung
+			positions: [
+				-10.0,  0.0,  0.0,   // Punkt links
+				 10.0,  0.0,  0.0,   // Punkt rechts
+				 0.0, -10.0,  0.0,   // Punkt unten
+				 0.0,  10.0,  0.0,   // Punkt oben
+				 0.0,   0.0,  0.0    // Punkt Mitte
+			],
+			
+			// Farben für die Punkte (RGBA)
+			colors: [
+				1.0,  0.0,  0.0,  1.0,  // Rot
+				0.0,  1.0,  0.0,  1.0,  // Grün
+				0.0,  0.0,  1.0,  1.0,  // Blau
+				1.0,  1.0,  0.0,  1.0,  // Gelb
+				1.0,  0.0,  1.0,  1.0   // Magenta
+			]
+		}
+	];
 	
 	var scene = new Scene(canvas, gl, model_data, vShaderCode, fShaderCode);
 

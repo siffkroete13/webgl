@@ -21,7 +21,6 @@ var MyUtil = (function() {
 			0.0, 											0.0, 						-(zNear - zFar) / (zNear - zFar), 		-1.0,
 			0.0, 											0.0, 						(2 * zFar * zNear) / (zNear - zFar), 	0.0
 		];
-	
 		
 		return projectionMatrix;
 	}
@@ -38,21 +37,23 @@ var MyUtil = (function() {
 		var fovy, aspect;
 		
 		fovy = 2 * toDegrees(Math.atan2(top, near));
-		if (-left === right && -bottom === top ) {
+		if (-left === right && -bottom === top) {
 			aspect = right / top; // width / height
-		
-			return this.createPerspective(fovy, aspect, near, far);
+			return this.getProjectionMat4(fovy, aspect, near, far);
+		} else {
+			console.error('Left und Right müssen gleich lang sein. Auch top, bottom, weil diese Funktion noch nicht fertig geschrieben ist für andere Werte.')
 		}
+		return false;
 	}
-		
+	
 	
 	Util.prototype.getOrthographicMat4 = function(left, right, bottom, top, zNear, zFar) {
 		
 		var orthographiMatrix = [
-			2.0 / (right - left), 0.0, 0.0, 0.0,
-			0.0, 2.0 / (top - bottom), 0.0, 0.0,
-			0.0, 0.0, -2.0 / (zFar - zNear), 0.0,
-			1.0, 1.0, -(zFar+zNear)/(zFar-zNear), 1.0
+			2.0 / (right - left), 		0.0, 								0.0, 								0.0,
+			0.0, 						2.0 / (top - bottom), 				0.0, 								0.0,
+			0.0, 						0.0, 								-2.0 / (zFar - zNear), 				0.0,
+			1.0, 						1.0, 								-(zFar+zNear)/(zFar-zNear), 		1.0
 		]
 		
 		return orthographiMatrix;
@@ -94,25 +95,74 @@ var MyUtil = (function() {
 		var a33 = a[3 * 4 + 3];
 	 
 		return [
-		  b00 * a00 + b01 * a10 + b02 * a20 + b03 * a30,
-		  b00 * a01 + b01 * a11 + b02 * a21 + b03 * a31,
-		  b00 * a02 + b01 * a12 + b02 * a22 + b03 * a32,
-		  b00 * a03 + b01 * a13 + b02 * a23 + b03 * a33,
-		  b10 * a00 + b11 * a10 + b12 * a20 + b13 * a30,
-		  b10 * a01 + b11 * a11 + b12 * a21 + b13 * a31,
-		  b10 * a02 + b11 * a12 + b12 * a22 + b13 * a32,
-		  b10 * a03 + b11 * a13 + b12 * a23 + b13 * a33,
-		  b20 * a00 + b21 * a10 + b22 * a20 + b23 * a30,
-		  b20 * a01 + b21 * a11 + b22 * a21 + b23 * a31,
-		  b20 * a02 + b21 * a12 + b22 * a22 + b23 * a32,
-		  b20 * a03 + b21 * a13 + b22 * a23 + b23 * a33,
-		  b30 * a00 + b31 * a10 + b32 * a20 + b33 * a30,
-		  b30 * a01 + b31 * a11 + b32 * a21 + b33 * a31,
-		  b30 * a02 + b31 * a12 + b32 * a22 + b33 * a32,
-		  b30 * a03 + b31 * a13 + b32 * a23 + b33 * a33,
+			b00 * a00 + b01 * a10 + b02 * a20 + b03 * a30,
+			b00 * a01 + b01 * a11 + b02 * a21 + b03 * a31,
+			b00 * a02 + b01 * a12 + b02 * a22 + b03 * a32,
+			b00 * a03 + b01 * a13 + b02 * a23 + b03 * a33,
+			b10 * a00 + b11 * a10 + b12 * a20 + b13 * a30,
+			b10 * a01 + b11 * a11 + b12 * a21 + b13 * a31,
+			b10 * a02 + b11 * a12 + b12 * a22 + b13 * a32,
+			b10 * a03 + b11 * a13 + b12 * a23 + b13 * a33,
+			b20 * a00 + b21 * a10 + b22 * a20 + b23 * a30,
+			b20 * a01 + b21 * a11 + b22 * a21 + b23 * a31,
+			b20 * a02 + b21 * a12 + b22 * a22 + b23 * a32,
+			b20 * a03 + b21 * a13 + b22 * a23 + b23 * a33,
+			b30 * a00 + b31 * a10 + b32 * a20 + b33 * a30,
+			b30 * a01 + b31 * a11 + b32 * a21 + b33 * a31,
+			b30 * a02 + b31 * a12 + b32 * a22 + b33 * a32,
+			b30 * a03 + b31 * a13 + b32 * a23 + b33 * a33,
 		];
-	  
 	}
+
+	Util.prototype.printMatrix4 = function(matrix, name = '') {
+		// Assumes the matrix is a 4x4 matrix in column-major order (as used in WebGL)
+		if (matrix.length !== 16) {
+			console.error("Invalid matrix length. Expected a 4x4 matrix.");
+			return;
+		}
+	
+		const fieldSize = 10; // Size of each field for alignment
+		console.log(name + ":");
+		for (let i = 0; i < 4; i++) {
+			let row = "";
+			for (let j = 0; j < 4; j++) {
+				// Format the number to a fixed width
+				let num = matrix[j * 4 + i].toFixed(4);
+				row += num.padStart(fieldSize, ' ') + " ";
+			}
+			console.log(row);
+		}
+	}
+
+	Util.prototype.T = function(mat) {
+		// Annahme: mat ist eine 4x4-Matrix (16 Elemente) in Spalten-major-Format
+		if (mat.length !== 16) {
+			console.error("Invalid matrix length. Expected a 4x4 matrix.");
+			return null;
+		}
+	
+		const result = new Float32Array(16);
+	
+		result[0] = mat[0];
+		result[1] = mat[4];
+		result[2] = mat[8];
+		result[3] = mat[12];
+		result[4] = mat[1];
+		result[5] = mat[5];
+		result[6] = mat[9];
+		result[7] = mat[13];
+		result[8] = mat[2];
+		result[9] = mat[6];
+		result[10] = mat[10];
+		result[11] = mat[14];
+		result[12] = mat[3];
+		result[13] = mat[7];
+		result[14] = mat[11];
+		result[15] = mat[15];
+	
+		return result;
+	}
+	
 	
 	var instance = null;
 	

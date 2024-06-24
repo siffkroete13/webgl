@@ -47,25 +47,25 @@ var Scene = (function() {
 	 		
 			mat4.fromRotation(rotate_x_matrix, this.angle_x * Math.PI / 180, [1, 0, 0]);
 			mat4.fromRotation(rotate_y_matrix, this.angle_y * Math.PI / 180, [0, 1, 0]);
-
+			
 			const fieldOfView = 45.0 * (Math.PI / 180.0);
 			const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 			const zNear = 0.1;
-			const zFar = 10.0;
-
+			const zFar = 20.0;
+			
 			// Create a perspective matrix, a special matrix that is used to simulate the distortion of perspective in a camera.
 			// Our field of view is 45 degrees, with a width/height  ratio that matches the display size of the canvas
 			// and we only want to see objects between zNear units and zFar units away from the camera.
 			// Create projection Matrix (das ist meine eigene Funktion!) ------------------
 			const projectionMatrix = myUtil.getProjectionMat4(fieldOfView, aspect, zNear, zFar);
-
-			// Stimmt diese Reihenfolge? Also das müsste am Ende sein:  projektion * rotate_y * rotate_x * gl_position;
-			mat4.multiply(transform, projectionMatrix, transform);
-			mat4.multiply(transform, rotate_y_matrix);
-			mat4.multiply(transform, rotate_x_matrix);
+			
+			// Das müsste am Ende sein:  projektion * rotate_y * rotate_x * gl_position;
+			
+			// mat4.multiply(transform, rotate_y_matrix, rotate_x_matrix);
 			
 			for (var i = 0; i < this.model_VOBs.length; ++i) {
-				this.model_VOBs[i].render(projectionMatrix);
+				myUtil.printMatrix4(projectionMatrix);
+				this.model_VOBs[i].render(projectionMatrix, transform);
 			}
 		}
 			

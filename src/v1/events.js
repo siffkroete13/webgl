@@ -32,7 +32,7 @@ var Events = (function() {
             var self = this;
             function renderLoop() {
                 self.scene.render();
-                requestAnimationFrame(renderLoop);
+                // requestAnimationFrame(renderLoop);
             }
             renderLoop();
         }
