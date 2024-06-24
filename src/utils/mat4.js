@@ -51,7 +51,7 @@
 /**
  * @constructor Create an instance of the Learn_webgl_matrix class
  */
-var matrix = function () {
+var mat4 = function () {
 
   var self = this;
 

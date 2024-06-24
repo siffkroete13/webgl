@@ -94,3 +94,5 @@ var ShaderUtil = (function() {
 	return new ShaderUtil();
 	
 })();
+
+export {ShaderUtil}

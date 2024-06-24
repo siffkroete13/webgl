@@ -126,3 +126,5 @@ var MyUtil = (function() {
 	}
 	
 })();
+
+export { MyUtil }

@@ -41,3 +41,5 @@ var Events = (function() {
 
     return Events;
 })();
+
+export { Events }

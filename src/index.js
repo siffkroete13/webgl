@@ -1,6 +1,9 @@
 "use strict";
 
 
+import { Scene } from "./v1/Scene.js";
+import { Events } from "./v1/Events.js";
+
 
 function main() {
 	var canvas = document.getElementById('meineWebGLCanvas');
@@ -39,6 +42,7 @@ function main() {
 		
 		num_lines: 12,
 		num_vertices: 8,
+		num_dim: 3,
 		
 		positions: [
 			// Vorderseite
@@ -77,7 +81,7 @@ function main() {
 	
 	canvas.addEventListener('mousedown', events.mouse_drag_started);
 	canvas.addEventListener('mouseup', events.mouse_drag_ended);
-	canvas.addEventListtener('mousemove', events.mouse_dragged);
+	canvas.addEventListener('mousemove', events.mouse_dragged);
 
 
 	/*
@@ -89,6 +93,15 @@ function main() {
 	*/
 	
 	events.animate();
+
+	if (module.hot) {
+		module.hot.accept('./v1/Scene.js', function() {
+			// Hier kannst du die Logik hinzufügen, die ausgeführt wird, wenn sich das Modul ändert.
+			console.log('Hot reload!');
+
+			events.animate();
+		});
+	}
 }
  
 

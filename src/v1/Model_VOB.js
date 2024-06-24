@@ -12,6 +12,8 @@ var Model_VOB = (function() {
 		// Shader variables
 		this.aVertexPosition = null;
 		this.aVertexColor = null;
+
+		this.num_points = this.model_data.positions.length / this.model_data.num_dim; // 3 Werte pro Punkt (x, y, z) oder vielleicht 2 pro Punkt(x, y)
 	
 	
 		this.createVertextPositionBuffer = function () {
@@ -44,7 +46,7 @@ var Model_VOB = (function() {
 		this.createVertextColorBuffer = function () {
 			// Ähnlich wie bei Position Buffer, einfach jetzt mit Color Buffer
 			this.color_buffer_id = this.gl.createBuffer();
-			this.gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+			this.gl.bindBuffer(gl.ARRAY_BUFFER, this.color_buffer_id);
 			this.gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.model_data.colors), gl.STATIC_DRAW);
 		}
 
@@ -64,33 +66,28 @@ var Model_VOB = (function() {
 			
 
 			// 1.) uniform variables ==>  shader kopieren.
-			this.gl.uniformMatrix4fv(this.program_data.uniformLocations, false, transform_matrix);
+			this.gl.uniformMatrix4fv(this.program_data.uniformLocations['uProjectionMatrix'], false, transform_matrix);
 			
 			// 2.) 3.) und 4.) Vertex-Buffer erstellen, Bind Buffer und Buffer Data
 			this.createVertextPositionBuffer();
-			
 			this.gl.vertexAttribPointer(this.aVertexPosition, 3, this.gl.FLOAT, false, 0, 0);
 			this.gl.enableVertexAttribArray(this.aVertexPosition);
 			
-			this.gl.bindBuffer(gl.ARRAY_BUFFER, this.color_buffer_id);
-			
-		
+			// Das gleiche für Color Buffer
+			this.createVertextColorBuffer();
 			this.gl.vertexAttribPointer(this.aVertexColor, 4, this.gl.FLOAT, false, 0, 0);
 			this.gl.enableVertexAttribArray(this.aVertexColor);
 			
 			// 5.) Excecute shader
 			// Draw all of the Lines, Poins oder Triangles
-			this.gl.drawArrays(gl.POINTS, 0, number_points);
+			this.gl.drawArrays(gl.POINTS, 0, this.num_points);
 
 		}
-	
-	
-	
-	
-	
 	
 	
 	} // End Konstruktor
 	
 	return Model;
 })();
+
+export {Model_VOB}
